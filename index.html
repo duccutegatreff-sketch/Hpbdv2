@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    font-family:system-ui,sans-serif;
+}
+
+.scene{
+    position:absolute;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.scene.active{display:flex}
+
+.rotated{
+    width:100vh;
+    height:100vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transform:rotate(90deg);
+}
+
+/* ================= SCENE 1 ================= */
+#scene1{
+    background:black;
+    color:white;
+    flex-direction:column;
+    gap:18px;
+    text-align:center;
+}
+.phone{
+    width:70px;height:130px;
+    border:3px solid white;
+    border-radius:18px;
+    position:relative;
+    animation:phoneRotate 2s infinite ease-in-out;
+}
+.phone::after{
+    content:"";
+    position:absolute;
+    bottom:8px;left:50%;
+    transform:translateX(-50%);
+    width:32px;height:4px;
+    background:white;border-radius:2px;
+}
+@keyframes phoneRotate{
+    0%{transform:rotate(0)}
+    50%{transform:rotate(-90deg)}
+    100%{transform:rotate(0)}
+}
+
+/* ================= SCENE 2 ================= */
+#scene2{background:#f8c8d8}
+.loader{text-align:center;width:240px}
+.bar{height:12px;background:white;border-radius:6px;overflow:hidden}
+.fill{height:100%;width:0%;background:#ff8fb1}
+.loading-text{margin-top:10px}
+
+/* ================= SCENE 3 ================= */
+#scene3{background:#f8c8d8}
+
+/* ===== CAKE ===== */
+.cake-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition:.5s ease;
+}
+.cake-wrap.hide{
+    opacity:0;
+    transform:scale(.8);
+    pointer-events:none;
+}
+.cake{
+    position:relative;
+    width:240px;height:240px;
+    animation:cakeAlive 4s ease-in-out infinite;
+}
+@keyframes cakeAlive{
+    0%,100%{transform:translateY(0) scale(1)}
+    50%{transform:translateY(-4px) scale(1.03)}
+}
+.cake-bottom{
+    position:absolute;bottom:0;
+    width:100%;height:110px;
+    background:white;border-radius:18px;overflow:hidden;
+}
+.cake-top{
+    position:absolute;bottom:90px;left:50%;
+    transform:translateX(-50%);
+    width:160px;height:80px;
+    background:white;border-radius:28px 28px 6px 6px;
+}
+.chocolate{
+    position:absolute;top:0;
+    width:100%;height:30px;
+    background:#5b2b18;
+    border-radius:22px 22px 14px 14px;
+}
+.fruit{position:absolute;border-radius:50%}
+.top{width:14px;height:14px}
+.top.f1{top:14px;left:20px;background:#ff4d4d}
+.top.f2{top:16px;right:26px;background:#ff9800}
+.top.f3{top:36px;left:50%;transform:translateX(-50%);background:#4caf50}
+
+.bottom.b1{width:16px;height:16px;top:16px;left:18px;background:#e91e63}
+.bottom.b2{width:12px;height:12px;top:22px;left:56px;background:#ff9800}
+.bottom.b3{width:18px;height:18px;top:26px;right:20px;background:#4caf50}
+.bottom.b4{width:14px;height:14px;top:44px;left:30px;background:#9c27b0}
+.bottom.b5{width:12px;height:12px;top:52px;right:54px;background:#ffc107}
+.bottom.b6{width:16px;height:16px;top:68px;left:96px;background:#03a9f4}
+.bottom.b7{width:10px;height:10px;top:78px;left:140px;background:#ff5722}
+
+.candles{
+    position:absolute;top:-32px;left:50%;
+    transform:translateX(-50%);
+    display:flex;gap:12px;
+}
+.candle{
+    width:10px;height:32px;
+    background:white;border-radius:4px;position:relative;
+}
+.candle::after{
+    content:"";
+    position:absolute;top:-10px;left:50%;
+    transform:translateX(-50%);
+    width:8px;height:8px;
+    background:gold;border-radius:50%;
+    animation:flame 1s infinite;
+}
+@keyframes flame{50%{opacity:.5}}
+.tap{margin-top:18px;font-size:14px;opacity:.7}
+
+/* ===== GIFT ===== */
+.gift{
+    width:160px;height:120px;
+    background:#ff4d6d;
+    position:absolute;
+    display:none;
+    cursor:pointer;
+    transform-origin:center bottom;
+    animation:giftPop .6s ease forwards, giftShake 1.8s ease-in-out infinite;
+}
+.gift.open{animation:none}
+@keyframes giftPop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes giftShake{
+    0%{transform:rotate(0)}
+    25%{transform:rotate(-2deg)}
+    50%{transform:rotate(2deg)}
+    75%{transform:rotate(-1deg)}
+    100%{transform:rotate(0)}
+}
+.gift .ribbon{
+    position:absolute;left:50%;top:-34px;
+    transform:translateX(-50%);
+    width:26px;height:154px;
+    background:#ffd166;z-index:3;
+}
+.gift .lid{
+    position:absolute;top:-34px;left:-8px;
+    width:176px;height:40px;
+    background:#ff6f91;
+    transform-origin:left bottom;
+    transition:.6s ease;
+    z-index:2;
+}
+.gift.open .lid{
+    transform:rotate(-30deg) translateY(-10px);
+}
+.gift .bow{
+    position:absolute;top:-60px;left:50%;
+    transform:translateX(-50%);
+    width:70px;height:40px;z-index:4;
+}
+.bow::before,.bow::after{
+    content:"";position:absolute;
+    width:34px;height:28px;
+    background:#ffd166;border-radius:50%;
+}
+.bow::before{left:0}
+.bow::after{right:0}
+.bow span{
+    position:absolute;left:50%;top:10px;
+    transform:translateX(-50%);
+    width:12px;height:12px;
+    background:#ffb703;border-radius:50%;
+}
+
+/* ===== PASSWORD PANEL ===== */
+.pass-panel{
+    position:absolute;
+    background:white;
+    padding:14px;
+    border-radius:14px;
+    display:none;
+    width:220px;
+}
+.pass-display{
+    height:36px;
+    border:2px solid #ff8fb1;
+    border-radius:8px;
+    margin-bottom:10px;
+    text-align:center;
+    font-size:20px;
+    letter-spacing:6px;
+}
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+.key{
+    background:#f8c8d8;
+    padding:12px 0;
+    text-align:center;
+    border-radius:8px;
+    font-weight:bold;
+    user-select:none;
+}
+.key.ok{background:#8bc34a;color:white}
+.key.del{background:#f44336;color:white}
+
+/* ================= SCENE 4 ================= */
+#scene4{
+    background:white;
+}
+.wish-box{
+    max-width:520px;
+    font-size:18px;
+    line-height:1.7;
+    color:#333;
+}
+.signature{
+    position:absolute;
+    bottom:20px;
+    right:24px;
+    font-style:italic;
+    color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div id="scene1" class="scene active">
+    <div>Vui lòng xoay ngang màn hình</div>
+    <div class="phone"></div>
+    <div>Chạm để tiếp tục</div>
+</div>
+
+<div id="scene2" class="scene">
+    <div class="rotated">
+        <div class="loader">
+            <div class="bar"><div class="fill"></div></div>
+            <div class="loading-text">Loading… 0%</div>
+        </div>
+    </div>
+</div>
+
+<div id="scene3" class="scene">
+    <div class="rotated">
+
+        <div class="cake-wrap" id="cakeWrap">
+            <div class="cake">
+                <div class="cake-top">
+                    <div class="chocolate"></div>
+                    <div class="fruit top f1"></div>
+                    <div class="fruit top f2"></div>
+                    <div class="fruit top f3"></div>
+                    <div class="candles">
+                        <div class="candle"></div>
+                        <div class="candle"></div>
+                        <div class="candle"></div>
+                    </div>
+                </div>
+                <div class="cake-bottom">
+                    <div class="chocolate"></div>
+                    <div class="fruit bottom b1"></div>
+                    <div class="fruit bottom b2"></div>
+                    <div class="fruit bottom b3"></div>
+                    <div class="fruit bottom b4"></div>
+                    <div class="fruit bottom b5"></div>
+                    <div class="fruit bottom b6"></div>
+                    <div class="fruit bottom b7"></div>
+                </div>
+            </div>
+            <div class="tap">Chạm vào màn hình để tiếp tục</div>
+        </div>
+
+        <div class="gift" id="giftBox">
+            <div class="ribbon"></div>
+            <div class="lid"></div>
+            <div class="bow"><span></span></div>
+        </div>
+
+        <div class="pass-panel" id="passPanel">
+            <div class="pass-display" id="passDisplay"></div>
+            <div class="keypad">
+                <div class="key">1</div><div class="key">2</div><div class="key">3</div>
+                <div class="key">4</div><div class="key">5</div><div class="key">6</div>
+                <div class="key">7</div><div class="key">8</div><div class="key">9</div>
+                <div class="key del">Xoá</div><div class="key">0</div><div class="key ok">OK</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="scene4" class="scene">
+    <div class="rotated">
+        <div class="wish-box">
+            Thay thông điệp vào đây!!!
+        </div>
+        <div class="signature">-- Minh Đức</div>
+    </div>
+</div>
+
+<script>
+scene1.onclick=()=>{
+    scene1.classList.remove("active");
+    scene2.classList.add("active");
+    let p=0;
+    const t=setInterval(()=>{
+        p++;
+        document.querySelector(".fill").style.width=p+"%";
+        document.querySelector(".loading-text").innerText="Loading… "+p+"%";
+        if(p>=100){
+            clearInterval(t);
+            scene2.classList.remove("active");
+            scene3.classList.add("active");
+        }
+    },30);
+};
+
+scene3.onclick=()=>{
+    cakeWrap.classList.add("hide");
+    giftBox.style.display="block";
+};
+
+let input="";
+const correct="090408";
+
+giftBox.onclick=(e)=>{
+    e.stopPropagation();
+    passPanel.style.display="block";
+};
+
+document.querySelectorAll(".key").forEach(k=>{
+    k.onclick=()=>{
+        if(k.classList.contains("del")){
+            input=input.slice(0,-1);
+        }else if(k.classList.contains("ok")){
+            if(input===correct){
+                passPanel.style.display="none";
+                giftBox.style.display="none";
+                scene3.classList.remove("active");
+                scene4.classList.add("active");
+            }else{
+                input="";
+            }
+        }else{
+            if(input.length<6) input+=k.innerText;
+        }
+        passDisplay.innerText="•".repeat(input.length);
+    };
+});
+</script>
+
+</body>
+</html>
